@@ -10,6 +10,7 @@ import androidx.leanback.widget.ListRow;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.bear.ApiConfig;
 import com.fongmi.bear.R;
 import com.fongmi.bear.bean.Func;
 import com.fongmi.bear.bean.Result;
@@ -68,7 +69,7 @@ public class HomeActivity extends BaseActivity implements VodPresenter.OnClickLi
 
     private void setViewModel() {
         mSiteViewModel = new ViewModelProvider(this).get(SiteViewModel.class);
-        mSiteViewModel.mResult.observe(this, result -> {
+        mSiteViewModel.result.observe(this, result -> {
             mAdapter.remove("progress");
             for (List<Vod> items : result.partition()) {
                 VodPresenter presenter = new VodPresenter(items.size());
@@ -89,6 +90,7 @@ public class HomeActivity extends BaseActivity implements VodPresenter.OnClickLi
 
     private void getVideo() {
         if (mAdapter.size() > 4) mAdapter.removeItems(4, mAdapter.size() - 4);
+        if (ApiConfig.get().getHome().getKey().isEmpty()) return;
         mSiteViewModel.homeContent();
         mAdapter.add("progress");
     }
